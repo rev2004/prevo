@@ -63,8 +63,9 @@ public class UdpStream extends Activity {
 			byte[] buf = new byte[BUF_SIZE];
 			audio_recorder.startRecording();
 			try {
-				InetAddress addr = InetAddress.getByName("192.168.173.10");
+				InetAddress addr = InetAddress.getByName("192.168.173.255");
 				DatagramSocket sock = new DatagramSocket();
+				sock.setBroadcast(true);
 
 				while (!sendThread.isInterrupted()) {
 					bytes_read = audio_recorder.read(buf, 0, BUF_SIZE);
