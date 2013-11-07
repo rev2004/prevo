@@ -60,7 +60,7 @@ public class UdpStream extends Activity {
 			byte[] buf = new byte[BUF_SIZE];
 			audio_recorder.startRecording();
 			try {
-				InetAddress addr = InetAddress.getByName("230.0.0.1");
+				InetAddress addr = InetAddress.getByName("192.168.173.10");
 				DatagramSocket sock = new DatagramSocket();
 
 				while (!sendThread.isInterrupted()) {
@@ -93,8 +93,7 @@ public class UdpStream extends Activity {
 			track.play();
 			int size = 0;
 			try {
-				MulticastSocket sock = new MulticastSocket(AUDIO_PORT);
-				sock.joinGroup(InetAddress.getByName("230.0.0.1"));
+				DatagramSocket sock = new DatagramSocket(AUDIO_PORT);
 
 				byte[] buf = new byte[BUF_SIZE];
 
