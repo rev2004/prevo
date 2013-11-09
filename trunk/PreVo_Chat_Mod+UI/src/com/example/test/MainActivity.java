@@ -26,17 +26,17 @@ import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class MainActivity extends Activity {
-	String[] receiveMsg;	// 수신 메세지 분할할때 쓰임
+	String[] receiveMsg; // 수신 메세지 분할할때 쓰임
 
 	// UI변수 선언
-	ImageView img_ppt;				// PPT 띄울 이미지 뷰
-	LinearLayout layout_option;		// 좌측 사이드 메뉴 (옵션메뉴)
-	LinearLayout layout_joinMember;	// 우측 사이드 메뉴 
-	LinearLayout layout_txtMain;	// 메인 화면
+	ImageView img_ppt; // PPT 띄울 이미지 뷰
+	LinearLayout layout_option; // 좌측 사이드 메뉴 (옵션메뉴)
+	LinearLayout layout_joinMember; // 우측 사이드 메뉴
+	LinearLayout layout_txtMain; // 메인 화면
 
-	Button btn_optionCall;		// 좌측 사이드 메뉴 호출 버튼
-	Button btn_joinMemberCall;	// 우측 사이드 메뉴 호출 버튼
-	Button btn_txtCall;			// 채팅창 여닫는 버튼
+	Button btn_optionCall; // 좌측 사이드 메뉴 호출 버튼
+	Button btn_joinMemberCall; // 우측 사이드 메뉴 호출 버튼
+	Button btn_txtCall; // 채팅창 여닫는 버튼
 
 	// 메뉴 버튼 눌림 감지
 	boolean flag_option_call = true;
@@ -44,9 +44,9 @@ public class MainActivity extends Activity {
 	boolean flag_txt_call = true;
 
 	// 채팅 변수 선언
-	EditText txt_msg;	// 메세지 입력란
-	Button btn_txtSend;	// send 버튼
-	ListView txt_view;	// 채팅창
+	EditText txt_msg; // 메세지 입력란
+	Button btn_txtSend; // send 버튼
+	ListView txt_view; // 채팅창
 	ArrayAdapter<String> txt_adapter;
 	ArrayList<String> txt_list;
 	private String txtString;
@@ -196,7 +196,6 @@ public class MainActivity extends Activity {
 		});
 	}
 
-
 	// 채팅관련 초기화
 	private void txtInit() {
 		// TODO Auto-generated method stub
@@ -237,32 +236,32 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	//내부 채팅 클래스
-	private class PreVoChatMod implements Runnable{
+	// 내부 채팅 클래스
+	private class PreVoChatMod implements Runnable {
 		// 멤버 변수 정의
-		private String IP = "125.179.159.11";		// IP 주소 변수
-		private int PORT = 8324;					// port 번호  변수
-		private String id = "Kwon_Android";	// 대화명 변수
+		private String IP = "125.179.159.11"; // IP 주소 변수
+		private int PORT = 8324; // port 번호 변수
+		private String id = "Kwon_Android"; // 대화명 변수
 
 		private Socket socket;
 		private ObjectInputStream ois;
 		private ObjectOutputStream oos;
-		private Handler mHandler;	// 스레드 핸들러
+		private Handler mHandler; // 스레드 핸들러
 
 		boolean isRun = true;
 
-		public void init(){
+		public void init() {
 			try {
 				socket = new Socket(IP, PORT);
-				mHandler.post(new Runnable(){
-					public void run(){
+				mHandler.post(new Runnable() {
+					public void run() {
 						txt_adapter.add("### PreVo 서버 접속 완료 ###\n\n");
 					}
 				});
 				oos = new ObjectOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());
-				//				Thread t = new Thread(this);
-				//				t.start();
+				// Thread t = new Thread(this);
+				// t.start();
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -272,19 +271,20 @@ public class MainActivity extends Activity {
 			}
 		}
 
-		public PreVoChatMod(){
+		public PreVoChatMod() {
 			mHandler = new Handler();
 
 			// 채팅 Send 버튼 이벤트 리스너
 			btn_txtSend.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if(txt_msg.getText().toString() == ""){
+					if (txt_msg.getText().toString().equals("")) {
 						return;
 					} else {
-						String msg = txt_msg.getText().toString(); // 채팅 내용 입력 받기
+						String msg = txt_msg.getText().toString(); // 채팅 내용 입력
+																	// 받기
 						txt_msg.setText("");
-						try{
+						try {
 							oos.writeObject(id + "#" + msg);
 							oos.flush();
 						} catch (IOException e) {
@@ -295,15 +295,15 @@ public class MainActivity extends Activity {
 				}
 			});
 
-//			사용자 추가
-//			mHandler.post(new Runnable(){
-//				public void run(){
-//					txt_status.append("대화명 : [" + id + "]");
-//				}
-//			});
-		}	// 생성자
+			// 사용자 추가
+			// mHandler.post(new Runnable(){
+			// public void run(){
+			// txt_status.append("대화명 : [" + id + "]");
+			// }
+			// });
+		} // 생성자
 
-		public void stop(){
+		public void stop() {
 			try {
 				ois.close();
 				oos.close();
@@ -314,16 +314,16 @@ public class MainActivity extends Activity {
 			}
 		}
 
-		public void run(){
+		public void run() {
 			String message = null;
 			receiveMsg = null;
 			boolean isStop = false;
 
 			init();
 
-			while(!isStop){
+			while (!isStop) {
 				try {
-					message = (String)ois.readObject();
+					message = (String) ois.readObject();
 					receiveMsg = message.split("#");
 				} catch (OptionalDataException e) {
 					// TODO Auto-generated catch block
@@ -339,13 +339,14 @@ public class MainActivity extends Activity {
 					isStop = true; // 반복문 종료로 설정
 				}
 
-				mHandler.post(new Runnable(){
-					public void run(){
-						txt_adapter.add(receiveMsg[0] + ":" +  receiveMsg[1] +"\n");
+				mHandler.post(new Runnable() {
+					public void run() {
+						txt_adapter.add(receiveMsg[0] + ":" + receiveMsg[1]
+								+ "\n");
 					}
 				});
 
-				if(isRun == false){
+				if (isRun == false) {
 					stop();
 				}
 			}
