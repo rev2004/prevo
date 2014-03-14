@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -19,20 +21,23 @@ import android.util.Log;
 public class UdpStream extends Activity {
 	Thread sendThread = new Thread(new SendAudio());
 	Thread recvThread = new Thread(new RecvAudio());
+	Thread tcpThread = new Thread(new TCPConnect());
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.udpstream);
 
-		if ((sendThread != null && sendThread.isAlive())
-				&& (recvThread != null && recvThread.isAlive())) {
-			sendThread.interrupt();
-			recvThread.interrupt();
-		} else {
-			sendThread.start();
-			recvThread.start();
-		}
+		tcpThread.start();
+
+//		if ((sendThread != null && sendThread.isAlive())
+//				&& (recvThread != null && recvThread.isAlive())) {
+//			sendThread.interrupt();
+//			recvThread.interrupt();
+//		} else {
+//			sendThread.start();
+//			recvThread.start();
+//		}
 	}
 
 	static final String LOG_TAG = "UdpStream";
@@ -41,6 +46,25 @@ public class UdpStream extends Activity {
 	static final int BUF_SIZE = AudioRecord.getMinBufferSize(SAMPLE_RATE,
 			AudioFormat.CHANNEL_CONFIGURATION_MONO,
 			AudioFormat.ENCODING_PCM_16BIT);;
+
+	class TCPConnect implements Runnable {
+		Socket socket = null;
+		InetAddress address = null;
+
+		@Override
+		public void run() {
+			try {
+				address = InetAddress.getByName("192.168.23.15");
+				socket = new Socket(address, 2048);
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	class SendAudio implements Runnable {
 		@Override
@@ -59,7 +83,7 @@ public class UdpStream extends Activity {
 				int bytes_count = 0;
 				byte[] buf = new byte[BUF_SIZE];
 				audio_recorder.startRecording();
-				InetAddress addr = InetAddress.getByName("192.168.173.30");
+				InetAddress addr = InetAddress.getByName("192.168.23.15");
 				DatagramSocket sock = new DatagramSocket();
 
 				while (!sendThread.isInterrupted()) {
