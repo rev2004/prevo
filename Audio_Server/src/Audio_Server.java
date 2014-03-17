@@ -32,17 +32,16 @@ class Audio_Server implements Runnable {
 					System.out.println("Empty일때");
 					clientList.add(tSocket.getInetAddress());
 				}
-				// 두번째부터 IP처리
-				else {
+				// 두번째 IP 처리
+				else if (clientList.size() == 1) {
+				} else {
 					for (int i = 0; i < clientList.size(); i++) {
 						for (int j = 0; j < clientList.size(); j++) {
 							if (clientList.get(i).equals(clientList.get(j)))
-								continue;
-							else
 								break;
 						}
-						clientList.add(tSocket.getInetAddress());
 					}
+					clientList.add(tSocket.getInetAddress());
 				}
 				System.out.println(clientList);
 			}
