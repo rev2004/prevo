@@ -14,6 +14,7 @@ class Audio_Server implements Runnable {
 
 	DatagramSocket socket = null;
 	DatagramPacket packet = null;
+	DatagramPacket sPacket = null;
 	ArrayList<InetAddress> address = null;
 	byte[] buf = null;
 
@@ -23,29 +24,51 @@ class Audio_Server implements Runnable {
 			clientList = new ArrayList<InetAddress>();
 			while (true) {
 				tSocket = tServerSocket.accept();
-				clientList.add(tSocket.getInetAddress());
+
+				System.out.println("들어온 IP : " + tSocket.getInetAddress());
+
+				// 처음에 IP한번 저장
+				if (clientList.isEmpty()) {
+					System.out.println("Empty일때");
+					clientList.add(tSocket.getInetAddress());
+				}
+				// 두번째부터 IP처리
+				else {
+					for (int i = 0; i < clientList.size(); i++) {
+						for (int j = 0; j < clientList.size(); j++) {
+							if (clientList.get(i).equals(clientList.get(j)))
+								continue;
+							else
+								break;
+						}
+						clientList.add(tSocket.getInetAddress());
+					}
+				}
 				System.out.println(clientList);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void run() {
 		try {
-			buf = new byte[512];
+			buf = new byte[1024];
 			socket = new DatagramSocket(2048);
 			while (true) {
 				packet = new DatagramPacket(buf, buf.length);
 				socket.receive(packet);
-				socket.send(packet);
+				for (int i = 0; i < clientList.size(); i++) {
+					if (!packet.getAddress().equals(clientList.get(i))) {
+						sPacket = new DatagramPacket(buf, buf.length,
+								clientList.get(i), 2048);
+						socket.send(sPacket);
+					}
+				}
 			}
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
