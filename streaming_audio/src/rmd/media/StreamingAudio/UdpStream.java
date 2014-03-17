@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -30,14 +29,14 @@ public class UdpStream extends Activity {
 
 		tcpThread.start();
 
-//		if ((sendThread != null && sendThread.isAlive())
-//				&& (recvThread != null && recvThread.isAlive())) {
-//			sendThread.interrupt();
-//			recvThread.interrupt();
-//		} else {
-//			sendThread.start();
-//			recvThread.start();
-//		}
+		if ((sendThread != null && sendThread.isAlive())
+				&& (recvThread != null && recvThread.isAlive())) {
+			sendThread.interrupt();
+			recvThread.interrupt();
+		} else {
+			sendThread.start();
+			recvThread.start();
+		}
 	}
 
 	static final String LOG_TAG = "UdpStream";
@@ -92,7 +91,7 @@ public class UdpStream extends Activity {
 							addr, AUDIO_PORT);
 					sock.send(pack);
 					bytes_count += bytes_read;
-					Log.e(LOG_TAG, "bytes_count : " + bytes_count);
+					// Log.e(LOG_TAG, "bytes_count : " + bytes_count);
 				}
 			} catch (SocketException se) {
 				Log.e(LOG_TAG, "Send SocketException" + se.getMessage());
@@ -125,7 +124,8 @@ public class UdpStream extends Activity {
 					DatagramPacket pack = new DatagramPacket(buf, BUF_SIZE);
 					sock.receive(pack);
 					size += pack.getLength();
-					Log.e(LOG_TAG, "recv pack: " + size);
+					Log.e("Address", "" +pack.getAddress());
+					//Log.e(LOG_TAG, "recv pack: " + size);
 					track.write(pack.getData(), 0, pack.getLength());
 				}
 			} catch (SocketException se) {
