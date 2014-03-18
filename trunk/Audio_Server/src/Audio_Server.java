@@ -18,6 +18,7 @@ class Audio_Server implements Runnable {
 	ArrayList<InetAddress> address = null;
 	byte[] buf = null;
 
+	// 릴레이 서버
 	public Audio_Server() {
 		try {
 			tServerSocket = new ServerSocket(2048);
@@ -34,14 +35,23 @@ class Audio_Server implements Runnable {
 				}
 				// 두번째 IP 처리
 				else if (clientList.size() == 1) {
-				} else {
+					System.out.println("size가 1일때");
 					for (int i = 0; i < clientList.size(); i++) {
-						for (int j = 0; j < clientList.size(); j++) {
-							if (clientList.get(i).equals(clientList.get(j)))
-								break;
+						if (!clientList.get(i).equals(tSocket.getInetAddress())) {
+							clientList.add(tSocket.getInetAddress());
 						}
 					}
-					clientList.add(tSocket.getInetAddress());
+				}
+				// 서로 다른 2개이상 IP가 들어왔을때 처리
+				else {
+					System.out.println("size가 2이상일때");
+					for (int i = 0; i < clientList.size(); i++) {
+						for (int j = 0; j < clientList.size(); j++) {
+							if (clientList.get(j).equals(
+									tSocket.getInetAddress()))
+								continue;
+						}
+					}
 				}
 				System.out.println(clientList);
 			}
@@ -50,6 +60,7 @@ class Audio_Server implements Runnable {
 		}
 	}
 
+	// 패킷전송 부분
 	public void run() {
 		try {
 			buf = new byte[1024];
