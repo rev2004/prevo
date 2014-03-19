@@ -6,9 +6,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-class Audio_Server implements Runnable {
-	ArrayList<InetAddress> clientList = null;
+class Audio_Server2 implements Runnable {
+	HashMap<InetAddress, String> clientList = null;
 	Socket tSocket = null;
 	ServerSocket tServerSocket = null;
 
@@ -19,40 +20,19 @@ class Audio_Server implements Runnable {
 	byte[] buf = null;
 
 	// 릴레이 서버
-	public Audio_Server() {
+	public Audio_Server2() {
 		try {
 			tServerSocket = new ServerSocket(2048);
-			clientList = new ArrayList<InetAddress>();
+			clientList = new HashMap<InetAddress, String>();
 			while (true) {
 				tSocket = tServerSocket.accept();
 
 				System.out.println("들어온 IP : " + tSocket.getInetAddress());
 
-				// 처음에 IP한번 저장
-				if (clientList.isEmpty()) {
-					System.out.println("Empty일때");
-					clientList.add(tSocket.getInetAddress());
-				}
-				// 두번째 IP 처리
-				else if (clientList.size() == 1) {
-					System.out.println("size가 1일때");
-					for (int i = 0; i < clientList.size(); i++) {
-						if (!clientList.get(i).equals(tSocket.getInetAddress())) {
-							clientList.add(tSocket.getInetAddress());
-						}
-					}
-				}
-				// 서로 다른 2개이상 IP가 들어왔을때 처리
-				else {
-					System.out.println("size가 2이상일때");
-					for (int i = 0; i < clientList.size(); i++) {
-						for (int j = 0; j < clientList.size(); j++) {
-							if (clientList.get(j).equals(
-									tSocket.getInetAddress()))
-								continue;
-						}
-					}
-				}
+				clientList.put(tSocket.getInetAddress(), "client");
+				
+				clientList.
+				
 				System.out.println(clientList);
 			}
 		} catch (IOException e) {
@@ -70,8 +50,7 @@ class Audio_Server implements Runnable {
 				socket.receive(packet);
 				for (int i = 0; i < clientList.size(); i++) {
 					if (!packet.getAddress().equals(clientList.get(i))) {
-						sPacket = new DatagramPacket(buf, buf.length,
-								clientList.get(i), 2048);
+						sPacket = new DatagramPacket(buf, buf.length);
 						socket.send(sPacket);
 					}
 				}
@@ -83,7 +62,7 @@ class Audio_Server implements Runnable {
 		}
 	}
 
-//	public static void main(String[] args) {
-//		new Thread(new Audio_Server()).start();
-//	}
+	public static void main(String[] args) {
+		new Thread(new Audio_Server2()).start();
+	}
 }
