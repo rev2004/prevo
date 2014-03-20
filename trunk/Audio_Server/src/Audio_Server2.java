@@ -31,7 +31,6 @@ class Audio_Server2 implements Runnable {
 
 				clientList.put(tSocket.getInetAddress(), "client");
 				
-				
 				System.out.println(clientList);
 			}
 		} catch (IOException e) {
@@ -61,7 +60,7 @@ class Audio_Server2 implements Runnable {
 		}
 	}
 
-	public static void main(String[] args) {
-		new Thread(new Audio_Server2()).start();
-	}
+//	public static void main(String[] args) {
+//		new Thread(new Audio_Server2()).start();
+//	}
 }

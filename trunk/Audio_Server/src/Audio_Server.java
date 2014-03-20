@@ -6,9 +6,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Audio_Server implements Runnable {
 	ArrayList<InetAddress> clientList = null;
+	HashMap<String, InetAddress> clientHash = null;
 	Socket tSocket = null;
 	ServerSocket tServerSocket = null;
 
@@ -23,6 +25,7 @@ class Audio_Server implements Runnable {
 		try {
 			tServerSocket = new ServerSocket(2048);
 			clientList = new ArrayList<InetAddress>();
+			clientHash = new HashMap<String, InetAddress>();
 			while (true) {
 				tSocket = tServerSocket.accept();
 
