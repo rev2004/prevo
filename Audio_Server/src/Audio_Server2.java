@@ -31,7 +31,6 @@ class Audio_Server2 implements Runnable {
 
 				clientList.put(tSocket.getInetAddress(), "client");
 				
-				clientList.
 				
 				System.out.println(clientList);
 			}
