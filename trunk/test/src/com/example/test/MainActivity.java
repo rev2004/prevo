@@ -47,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements
 	 */
 	private CharSequence mTitle;
 	private static int sectionNo;
+	static String sQuery;
 
 	static SQLiteDatabase mDatabase;
 	static String db_path = Environment.getExternalStorageDirectory()
@@ -210,6 +211,7 @@ public class MainActivity extends ActionBarActivity implements
 						String textCheck = mainText.getText().toString();
 						textCheck = textCheck.trim();
 						String[] textArray = textCheck.split(",");
+						Log.e("Text", textArray + "");
 
 						if (textCheck.getBytes().length <= 0) {
 							Toast.makeText(getActivity(), "공백을 입력하였습니다.",
@@ -221,8 +223,16 @@ public class MainActivity extends ActionBarActivity implements
 							imm.hideSoftInputFromWindow(
 									mainText.getWindowToken(), 0);
 
-							String sQuery = "select * from univ where univ_major like "
-									+ "'%" + textCheck + "%'";
+							String[] sUniv = { "univ_name", "univ_major",
+									"univ_percent" };
+
+							if (textArray.length == 1) {
+								for (int i = 0; i < 3; i++) {
+									sQuery = "select * from univ where "
+											+ sUniv[i] + " like " + "'%"
+											+ textCheck + "%'";
+								}
+							}
 
 							Cursor cursor = mDatabase.rawQuery(sQuery, null);
 							Log.e("Query", sQuery);
