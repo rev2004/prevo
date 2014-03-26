@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <string name="app_name">test</string>
+    <string name="title_section_main">메인</string>
+    <string name="title_section1">자유게시판</string>
+    <string name="title_section2">선배추천 강사정보</string>
+    <string name="title_section3">대학별 입시요강</string>
+    <string name="title_section4">수능 입시정보 사이트</string>
+    <string name="title_section5">중섭이네 블로그</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
