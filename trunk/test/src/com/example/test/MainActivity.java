@@ -230,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements
 								do {
 									String str = cursor.getString(0) + ","
 											+ cursor.getString(1) + ","
-											+ cursor.getFloat(6);
+											+ cursor.getString(6);
 									mainArray.add(str);
 								} while (cursor.moveToNext());
 							}
