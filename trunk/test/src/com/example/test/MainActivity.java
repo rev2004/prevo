@@ -222,7 +222,7 @@ public class MainActivity extends ActionBarActivity implements
 									mainText.getWindowToken(), 0);
 
 							String sQuery = "select * from univ where univ_major like "
-									+ "'" + textCheck + "%'";
+									+ "'%" + textCheck + "%'";
 
 							Cursor cursor = mDatabase.rawQuery(sQuery, null);
 							Log.e("Query", sQuery);
